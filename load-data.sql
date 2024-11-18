@@ -86,7 +86,7 @@ CREATE TABLE stations (
     PRIMARY KEY (id)
 );
 
-LOAD DATA INFILE 'C:\\projects\\load-data-mysql-exercise-datasource\\stations.csv'
+LOAD DATA INFILE 'C:\\projects\\load-data-mysql-exercise\\stations.csv'
 INTO TABLE stations
 FIELDS TERMINATED BY ';'
 LINES TERMINATED BY '\r\n'
