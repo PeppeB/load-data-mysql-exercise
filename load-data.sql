@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS import_csv;
+CREATE DATABASE IF NOT EXISTS import_gb_csv;
 
 -- id;name;slug;uic;uic8_sncf;latitude;longitude;parent_station_id;country;time_zone;is_city;is_main_station;is_airport;is_suggestable;country_hint;main_station_hint;sncf_id;sncf_tvs_id;sncf_is_enabled;entur_id;entur_is_enabled;db_id;db_is_enabled;busbud_id;busbud_is_enabled;distribusion_id;distribusion_is_enabled;flixbus_id;flixbus_is_enabled;cff_id;cff_is_enabled;leoexpress_id;leoexpress_is_enabled;obb_id;obb_is_enabled;ouigo_id;ouigo_is_enabled;trenitalia_id;trenitalia_is_enabled;trenitalia_rtvt_id;trenord_id;ntv_rtiv_id;ntv_id;ntv_is_enabled;hkx_id;hkx_is_enabled;renfe_id;renfe_is_enabled;atoc_id;atoc_is_enabled;benerail_id;benerail_is_enabled;westbahn_id;westbahn_is_enabled;sncf_self_service_machine;same_as;info:de;info:en;info:es;info:fr;info:it;info:nb;info:nl;info:cs;info:da;info:hu;info:ja;info:ko;info:pl;info:pt;info:ru;info:sv;info:tr;info:zh;normalised_code;iata_airport_code
 
-USE import_csv;
+USE import_gb_csv;
 
 DROP TABLE IF EXISTS stations;
 
@@ -82,14 +82,15 @@ CREATE TABLE stations (
     `info:tr` VARCHAR(50) NULL,
     `info:zh` VARCHAR(50) NULL,
     normalised_code VARCHAR(50) NULL,
-    iata_airport_code CHAR(3) NULL,
-    PRIMARY KEY (id)
+    iata_airport_code CHAR(3) NULL
+#                       ,PRIMARY KEY (id)
 );
 
 LOAD DATA INFILE 'C:\\projects\\load-data-mysql-exercise\\stations.csv'
 INTO TABLE stations
 FIELDS TERMINATED BY ';'
-LINES TERMINATED BY '\r\n'
+# LINES TERMINATED BY '\\r\\n' -- separatore per CRLF
+LINES TERMINATED BY '\\n' -- separatore per LF
 IGNORE 1 LINES
 (
     id, 
@@ -167,9 +168,9 @@ IGNORE 1 LINES
     `info:tr`,
     `info:zh`,
     normalised_code,
-    @iata_airport_code
-)
-SET iata_airport_code = NULLIF( IFNULL(@iata_airport_code, ''),'' );
+    iata_airport_code
+);
+# SET iata_airport_code = NULLIF( IFNULL(@iata_airport_code, ''),'' );
 
 SELECT id,name, `info:it`, iata_airport_code, normalised_code
 FROM stations
