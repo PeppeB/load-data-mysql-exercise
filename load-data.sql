@@ -82,14 +82,15 @@ CREATE TABLE stations (
     `info:tr` VARCHAR(50) NULL,
     `info:zh` VARCHAR(50) NULL,
     normalised_code VARCHAR(50) NULL,
-    iata_airport_code CHAR(3) NULL,
-    PRIMARY KEY (id)
+    iata_airport_code CHAR(3) NULL
+#                       ,PRIMARY KEY (id)
 );
 
 LOAD DATA INFILE 'C:\\projects\\load-data-mysql-exercise\\stations.csv'
 INTO TABLE stations
 FIELDS TERMINATED BY ';'
-LINES TERMINATED BY '\r\n'
+# LINES TERMINATED BY '\\r\\n' -- separatore per CRLF
+LINES TERMINATED BY '\\n' -- separatore per LF
 IGNORE 1 LINES
 (
     id, 
@@ -167,9 +168,9 @@ IGNORE 1 LINES
     `info:tr`,
     `info:zh`,
     normalised_code,
-    @iata_airport_code
-)
-SET iata_airport_code = NULLIF( IFNULL(@iata_airport_code, ''),'' );
+    iata_airport_code
+);
+# SET iata_airport_code = NULLIF( IFNULL(@iata_airport_code, ''),'' );
 
 SELECT id,name, `info:it`, iata_airport_code, normalised_code
 FROM stations
